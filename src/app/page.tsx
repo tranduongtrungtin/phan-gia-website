@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import FloatingContact from './_components/FloatingContact'
 import SiteHeader from './_components/SiteHeader'
 import SiteFooter from './_components/SiteFooter'
-
+import HeroSlider from './_components/HeroSlider'
 export async function generateMetadata() {
   const supabase = await createClient()
   const { data: settings } = await supabase
@@ -48,7 +48,10 @@ export default async function Home() {
   const diaChi = settings?.dia_chi || '56 Võ Văn Kiệt, P. Bình Thủy, TP. Cần Thơ'
   const hotlineTel = hotline.replace(/\s/g, '')
   const mapPlaceName = settings?.map_place_name || 'Quảng cáo Phan Gia'
-  const heroImage = settings?.hero_image_url || '/images/hero-01.jpg'
+  const heroImages: string[] =
+    Array.isArray(settings?.hero_images) && settings.hero_images.length > 0
+      ? settings.hero_images
+      : ['/images/hero-01.jpg']
 
   const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${mapPlaceName}, ${diaChi}`)}&output=embed`
 
@@ -96,8 +99,8 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="hero-image">
-              <img src={heroImage} alt="Công trình quảng cáo Phan Gia" />
+            <div className="hero-image" style={{ position: 'relative' }}>
+              <HeroSlider images={heroImages} />
 
               <div className="image-badge">
                 <strong>PHAN GIA</strong>

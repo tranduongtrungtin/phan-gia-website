@@ -32,20 +32,54 @@ export async function updateSettings(formData: FormData) {
     }
   }
 
-  const heroFile = formData.get('hero_file') as File | null
+  if (formData.has('hero_section_touched')) {
+    const heroCount = Number(formData.get('hero_count') || 0)
+    const finalUrls: string[] = []
 
-  if (heroFile && heroFile.size > 0) {
-    const ext = heroFile.name.split('.').pop()
-    const fileName = `hero-${crypto.randomUUID()}.${ext}`
+    for (let i = 0; i < heroCount; i++) {
+      const originalUrl = formData.get(`hero_url_${i}`) as string
+      const isDeleted = formData.get(`delete_hero_${i}`) === 'on'
+      const replaceFile = formData.get(`replace_hero_${i}`) as File | null
 
-    const { error: uploadError } = await supabase.storage
-      .from('images')
-      .upload(fileName, heroFile)
+      if (isDeleted) continue
 
-    if (!uploadError) {
-      const { data } = supabase.storage.from('images').getPublicUrl(fileName)
-      updateData.hero_image_url = data.publicUrl
+      if (replaceFile && replaceFile.size > 0) {
+        const ext = replaceFile.name.split('.').pop()
+        const fileName = `hero-${crypto.randomUUID()}.${ext}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('images')
+          .upload(fileName, replaceFile)
+
+        if (!uploadError) {
+          const { data } = supabase.storage.from('images').getPublicUrl(fileName)
+          finalUrls.push(data.publicUrl)
+        } else {
+          finalUrls.push(originalUrl)
+        }
+      } else {
+        finalUrls.push(originalUrl)
+      }
     }
+
+    const newHeroFiles = formData.getAll('new_hero_files') as File[]
+    const validNewFiles = newHeroFiles.filter((f) => f && f.size > 0)
+
+    for (const heroFile of validNewFiles) {
+      const ext = heroFile.name.split('.').pop()
+      const fileName = `hero-${crypto.randomUUID()}.${ext}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(fileName, heroFile)
+
+      if (!uploadError) {
+        const { data } = supabase.storage.from('images').getPublicUrl(fileName)
+        finalUrls.push(data.publicUrl)
+      }
+    }
+
+    updateData.hero_images = finalUrls
   }
 
   await supabase.from('site_settings').update(updateData).eq('id', 1)

@@ -10,6 +10,10 @@ export default async function SettingsPage() {
     .eq('id', 1)
     .single()
 
+  const heroImages: string[] = Array.isArray(settings?.hero_images)
+    ? settings.hero_images
+    : []
+
   return (
     <div>
       <AdminHeader />
@@ -20,6 +24,9 @@ export default async function SettingsPage() {
           action={updateSettings}
           style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
         >
+          <input type="hidden" name="hero_section_touched" value="1" />
+          <input type="hidden" name="hero_count" value={heroImages.length} />
+
           <label>
             Số điện thoại (hotline)
             <input name="hotline" defaultValue={settings?.hotline} style={inputStyle} />
@@ -81,23 +88,65 @@ export default async function SettingsPage() {
             <input name="logo_file" type="file" accept="image/*" style={inputStyle} />
           </label>
 
-          {settings?.hero_image_url && (
-            <div>
-              <p style={{ margin: '0 0 6px', fontSize: '13px', color: '#666' }}>
-                Ảnh banner trang chủ hiện tại:
-              </p>
-              <img
-                src={settings.hero_image_url}
-                alt="Hero"
-                style={{ width: '100%', maxWidth: '300px', border: '1px solid #ddd', padding: '6px' }}
-              />
-            </div>
-          )}
+          <div>
+            <p style={{ margin: '0 0 10px', fontSize: '14px', fontWeight: 600 }}>
+              Ảnh banner trang chủ ({heroImages.length} ảnh, sẽ tự động chạy slide)
+            </p>
 
-          <label>
-            {settings?.hero_image_url ? 'Đổi ảnh banner khác' : 'Tải ảnh banner trang chủ lên'}
-            <input name="hero_file" type="file" accept="image/*" style={inputStyle} />
-          </label>
+            {heroImages.map((url, i) => (
+              <div
+                key={url}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  border: '1px solid #ddd',
+                  padding: '10px',
+                  marginBottom: '8px',
+                }}
+              >
+                <input type="hidden" name={`hero_url_${i}`} value={url} />
+
+                <img
+                  src={url}
+                  alt={`Hero ${i + 1}`}
+                  style={{ width: '90px', height: '60px', objectFit: 'cover', flexShrink: 0 }}
+                />
+
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '12px', color: '#666' }}>
+                    Thay ảnh này bằng ảnh khác:
+                    <input
+                      name={`replace_hero_${i}`}
+                      type="file"
+                      accept="image/*"
+                      style={{ ...inputStyle, marginTop: '4px' }}
+                    />
+                  </label>
+                </div>
+
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '13px',
+                    fontWeight: 'normal',
+                    color: '#a90000',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <input type="checkbox" name={`delete_hero_${i}`} style={{ width: 'auto' }} />
+                  Xoá
+                </label>
+              </div>
+            ))}
+
+            <label>
+              Thêm ảnh mới (chọn nhiều ảnh cùng lúc)
+              <input name="new_hero_files" type="file" accept="image/*" multiple style={inputStyle} />
+            </label>
+          </div>
 
           <label>
             Tiêu đề tab trình duyệt (SEO)
