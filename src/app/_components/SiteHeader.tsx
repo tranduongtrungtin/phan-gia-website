@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 
 type MenuItem = { id: string; nhan: string; duong_dan: string }
@@ -10,6 +13,8 @@ export default function SiteHeader({
   menuItems: MenuItem[] | null
   settings: Settings
 }) {
+  const [mobileOpen, setMobileOpen] = useState(false)
+
   const items =
     menuItems && menuItems.length > 0
       ? menuItems
@@ -20,6 +25,8 @@ export default function SiteHeader({
           { id: '4', nhan: 'Dự án', duong_dan: '#du-an' },
           { id: '5', nhan: 'Liên hệ', duong_dan: '#lien-he' },
         ]
+
+  const toggleLabel = mobileOpen ? 'Dong' : 'Mo'
 
   return (
     <header className="header">
@@ -36,17 +43,35 @@ export default function SiteHeader({
         </Link>
       )}
 
-      <nav>
+      <nav className={mobileOpen ? 'is-open' : ''}>
         {items.map((m) => (
-          <a key={m.id} href={m.duong_dan.startsWith('#') ? '/' + m.duong_dan : m.duong_dan}>
+          <a
+            key={m.id}
+            href={m.duong_dan.startsWith('#') ? '/' + m.duong_dan : m.duong_dan}
+            onClick={() => setMobileOpen(false)}
+          >
             {m.nhan}
           </a>
         ))}
       </nav>
 
-      <Link className="header-button" href="/#lien-he">
-        NHẬN BÁO GIÁ
-      </Link>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <Link className="header-button" href="/#lien-he">
+          NHẬN BÁO GIÁ
+        </Link>
+
+        <button
+          className="mobile-menu-toggle"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={toggleLabel + ' menu'}
+        >
+          <span className="menu-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
     </header>
   )
 }
