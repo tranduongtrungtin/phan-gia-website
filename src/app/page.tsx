@@ -35,6 +35,8 @@ export default async function Home() {
   const diaChi = settings?.dia_chi || '56 Võ Văn Kiệt, P. Bình Thủy, TP. Cần Thơ'
   const hotlineTel = hotline.replace(/\s/g, '')
 
+  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(diaChi)}&output=embed`
+
   const tickerItems = [
     '15+ NĂM KINH NGHIỆM',
     '120+ CÔNG TRÌNH HOÀN THÀNH',
@@ -169,7 +171,9 @@ export default async function Home() {
           <div className="capability-grid">
             <div className="capability-card">
               <div className="capability-number">01</div>
+
               <h3>Tư vấn &amp; lên ý tưởng</h3>
+
               <p>
                 Tiếp nhận nhu cầu, khảo sát thực tế và đề xuất phương án
                 phù hợp với thương hiệu, không gian và ngân sách.
@@ -178,7 +182,9 @@ export default async function Home() {
 
             <div className="capability-card">
               <div className="capability-number">02</div>
+
               <h3>Thiết kế</h3>
+
               <p>
                 Phát triển ý tưởng thành phương án thiết kế trực quan,
                 rõ ràng và phù hợp với nhận diện thương hiệu.
@@ -187,7 +193,9 @@ export default async function Home() {
 
             <div className="capability-card">
               <div className="capability-number">03</div>
+
               <h3>Sản xuất</h3>
+
               <p>
                 Gia công các hạng mục quảng cáo theo thiết kế và yêu cầu
                 kỹ thuật đã thống nhất.
@@ -196,7 +204,9 @@ export default async function Home() {
 
             <div className="capability-card">
               <div className="capability-number">04</div>
+
               <h3>Thi công</h3>
+
               <p>
                 Lắp đặt và hoàn thiện công trình tại thực tế, đảm bảo
                 tính thẩm mỹ và khả năng sử dụng.
@@ -210,6 +220,7 @@ export default async function Home() {
           <div className="section-heading">
             <div>
               <div className="section-label">DỊCH VỤ</div>
+
               <h2>
                 Giải pháp quảng cáo
                 <br />
@@ -231,7 +242,9 @@ export default async function Home() {
 
                 <div className="service-card-content">
                   <span>{String(s.so_thu_tu).padStart(2, '0')}</span>
+
                   <h3>{s.ten}</h3>
+
                   <p>{s.mo_ta_ngan}</p>
 
                   {s.tags && s.tags.length > 0 && (
@@ -260,6 +273,7 @@ export default async function Home() {
           <div className="section-heading">
             <div>
               <div className="section-label">DỰ ÁN</div>
+
               <h2>
                 Công trình
                 <br />
@@ -275,11 +289,18 @@ export default async function Home() {
 
           <div className="project-grid">
             {projects?.map((p) => (
-              <a key={p.id} href={`/du-an/${p.slug}`} className="project-card">
-                {p.hinh_dai_dien && <img src={p.hinh_dai_dien} alt={p.ten} />}
+              <a
+                key={p.id}
+                href={`/du-an/${p.slug}`}
+                className="project-card"
+              >
+                {p.hinh_dai_dien && (
+                  <img src={p.hinh_dai_dien} alt={p.ten} />
+                )}
 
                 <div className="project-overlay">
                   <span>{String(p.so_thu_tu).padStart(2, '0')}</span>
+
                   <div>
                     <strong>{p.ten}</strong>
                     <small>XEM CHI TIẾT →</small>
@@ -324,16 +345,90 @@ export default async function Home() {
 
           <div className="contact-box">
             <span>HOTLINE TƯ VẤN</span>
+
             <strong>{hotline}</strong>
+
             <small>{email}</small>
+
             <small>{diaChi}</small>
+          </div>
+        </section>
+
+        {/* BẢN ĐỒ */}
+        <section
+          className="homepage-map"
+          style={{
+            padding: '70px 48px 80px',
+            background: '#d9c3a4',
+          }}
+        >
+          <div
+            style={{
+              maxWidth: '1280px',
+              margin: '0 auto',
+            }}
+          >
+            <div
+              className="section-label"
+              style={{
+                marginBottom: '16px',
+              }}
+            >
+              VỊ TRÍ PHAN GIA
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <div
+                style={{
+                  width: '420px',
+                  maxWidth: '100%',
+                }}
+              >
+                <iframe
+                  src={mapUrl}
+                  width="420"
+                  height="250"
+                  style={{
+                    border: 0,
+                    width: '100%',
+                    height: '250px',
+                    display: 'block',
+                    boxShadow: '0 12px 28px rgba(75,41,19,0.18)',
+                  }}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Bản đồ vị trí Phan Gia"
+                />
+
+                <div
+                  style={{
+                    background: '#4b2913',
+                    color: '#ffffff',
+                    padding: '14px 18px',
+                    fontSize: '13px',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {diaChi}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <SiteFooter />
       </main>
 
-      <FloatingContact zaloSo={settings?.zalo_so} viberSo={settings?.viber_so} />
+      <FloatingContact
+        zaloSo={settings?.zalo_so}
+        viberSo={settings?.viber_so}
+      />
     </>
   )
 }
