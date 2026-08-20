@@ -12,6 +12,9 @@ export async function updateSettings(formData: FormData) {
     dia_chi: formData.get('dia_chi') as string,
     zalo_so: formData.get('zalo_so') as string,
     viber_so: formData.get('viber_so') as string,
+    map_place_name: formData.get('map_place_name') as string,
+    site_title: formData.get('site_title') as string,
+    ticker_text: formData.get('ticker_text') as string,
     updated_at: new Date().toISOString(),
   }
 
@@ -26,6 +29,22 @@ export async function updateSettings(formData: FormData) {
     if (!uploadError) {
       const { data } = supabase.storage.from('images').getPublicUrl(fileName)
       updateData.logo_url = data.publicUrl
+    }
+  }
+
+  const heroFile = formData.get('hero_file') as File | null
+
+  if (heroFile && heroFile.size > 0) {
+    const ext = heroFile.name.split('.').pop()
+    const fileName = `hero-${crypto.randomUUID()}.${ext}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(fileName, heroFile)
+
+    if (!uploadError) {
+      const { data } = supabase.storage.from('images').getPublicUrl(fileName)
+      updateData.hero_image_url = data.publicUrl
     }
   }
 

@@ -36,6 +36,16 @@ export default async function SettingsPage() {
           </label>
 
           <label>
+            Tên địa điểm ghim trên bản đồ (VD: Quảng cáo Phan Gia)
+            <input
+              name="map_place_name"
+              defaultValue={settings?.map_place_name}
+              placeholder="Quảng cáo Phan Gia"
+              style={inputStyle}
+            />
+          </label>
+
+          <label>
             Số Zalo (để trống nếu chưa muốn hiện nút Zalo)
             <input
               name="zalo_so"
@@ -69,6 +79,47 @@ export default async function SettingsPage() {
           <label>
             {settings?.logo_url ? 'Đổi logo khác' : 'Tải logo lên'} (để trống thì dùng chữ PHAN GIA)
             <input name="logo_file" type="file" accept="image/*" style={inputStyle} />
+          </label>
+
+          {settings?.hero_image_url && (
+            <div>
+              <p style={{ margin: '0 0 6px', fontSize: '13px', color: '#666' }}>
+                Ảnh banner trang chủ hiện tại:
+              </p>
+              <img
+                src={settings.hero_image_url}
+                alt="Hero"
+                style={{ width: '100%', maxWidth: '300px', border: '1px solid #ddd', padding: '6px' }}
+              />
+            </div>
+          )}
+
+          <label>
+            {settings?.hero_image_url ? 'Đổi ảnh banner khác' : 'Tải ảnh banner trang chủ lên'}
+            <input name="hero_file" type="file" accept="image/*" style={inputStyle} />
+          </label>
+
+          <label>
+            Tiêu đề tab trình duyệt (SEO)
+            <input
+              name="site_title"
+              defaultValue={settings?.site_title}
+              placeholder="Phan Gia - Quảng cáo & Trang trí"
+              style={inputStyle}
+            />
+          </label>
+
+          <label>
+            Nội dung dải chữ chạy (mỗi dòng 1 mục)
+            <textarea
+              name="ticker_text"
+              defaultValue={settings?.ticker_text}
+              placeholder={
+                '15+ NĂM KINH NGHIỆM\n120+ CÔNG TRÌNH HOÀN THÀNH\nTHIẾT KẾ • SẢN XUẤT • THI CÔNG'
+              }
+              rows={4}
+              style={inputStyle}
+            />
           </label>
 
           <button

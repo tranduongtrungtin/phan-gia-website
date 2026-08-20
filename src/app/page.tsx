@@ -3,6 +3,19 @@ import FloatingContact from './_components/FloatingContact'
 import SiteHeader from './_components/SiteHeader'
 import SiteFooter from './_components/SiteFooter'
 
+export async function generateMetadata() {
+  const supabase = await createClient()
+  const { data: settings } = await supabase
+    .from('site_settings')
+    .select('site_title')
+    .eq('id', 1)
+    .single()
+
+  return {
+    title: settings?.site_title || 'Phan Gia - Quảng cáo & Trang trí',
+  }
+}
+
 export default async function Home() {
   const supabase = await createClient()
 
@@ -34,14 +47,19 @@ export default async function Home() {
   const email = settings?.email || 'quangcaophangia@gmail.com'
   const diaChi = settings?.dia_chi || '56 Võ Văn Kiệt, P. Bình Thủy, TP. Cần Thơ'
   const hotlineTel = hotline.replace(/\s/g, '')
+  const mapPlaceName = settings?.map_place_name || 'Quảng cáo Phan Gia'
+  const heroImage = settings?.hero_image_url || '/images/hero-01.jpg'
 
-  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`Quảng cáo Phan Gia, ${diaChi}`)}&output=embed`
-  const tickerItems = [
-    '15+ NĂM KINH NGHIỆM',
-    '120+ CÔNG TRÌNH HOÀN THÀNH',
-    'THIẾT KẾ • SẢN XUẤT • THI CÔNG',
-    'ĐỐI TÁC TIN CẬY TẠI ĐBSCL',
-  ]
+  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${mapPlaceName}, ${diaChi}`)}&output=embed`
+
+  const tickerItems = settings?.ticker_text
+    ? settings.ticker_text.split('\n').map((t: string) => t.trim()).filter(Boolean)
+    : [
+        '15+ NĂM KINH NGHIỆM',
+        '120+ CÔNG TRÌNH HOÀN THÀNH',
+        'THIẾT KẾ • SẢN XUẤT • THI CÔNG',
+        'ĐỐI TÁC TIN CẬY TẠI ĐBSCL',
+      ]
 
   return (
     <>
@@ -79,10 +97,7 @@ export default async function Home() {
             </div>
 
             <div className="hero-image">
-              <img
-                src="/images/hero-01.jpg"
-                alt="Công trình quảng cáo Phan Gia"
-              />
+              <img src={heroImage} alt="Công trình quảng cáo Phan Gia" />
 
               <div className="image-badge">
                 <strong>PHAN GIA</strong>
@@ -288,8 +303,8 @@ export default async function Home() {
 
           <div className="project-grid">
             {projects?.map((p) => (
-              <a
-                key={p.id}
+              
+              <a  key={p.id}
                 href={`/du-an/${p.slug}`}
                 className="project-card"
               >
