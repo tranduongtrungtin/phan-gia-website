@@ -105,7 +105,7 @@ h1,h2,h3,h4{
   background:
     radial-gradient(circle at 18% 24%, rgba(201,163,106,0.10), transparent 40%),
     radial-gradient(circle at 82% 70%, rgba(138,90,58,0.08), transparent 45%),
-    linear-gradient(180deg,#ffffff 0%, #f7f4ec 100%);
+    linear-gradient(180deg,#f0dbb0 0%, #e6d3a8 100%);
 }
 .hero-content{
   max-width:1280px;margin:0 auto;
