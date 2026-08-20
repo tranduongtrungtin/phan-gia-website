@@ -35,8 +35,7 @@ export default async function Home() {
   const diaChi = settings?.dia_chi || '56 Võ Văn Kiệt, P. Bình Thủy, TP. Cần Thơ'
   const hotlineTel = hotline.replace(/\s/g, '')
 
-  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(diaChi)}&output=embed`
-
+  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`Quảng cáo Phan Gia, ${diaChi}`)}&output=embed`
   const tickerItems = [
     '15+ NĂM KINH NGHIỆM',
     '120+ CÔNG TRÌNH HOÀN THÀNH',
