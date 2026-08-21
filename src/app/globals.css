@@ -172,7 +172,7 @@ h1,h2,h3,h4{
 .intro-content p{color:var(--text-soft);font-size:15px;margin-bottom:16px;}
 .intro-points{display:flex;gap:40px;margin-top:36px;flex-wrap:wrap;}
 .intro-points > div{display:flex;flex-direction:column;gap:8px;}
-.intro-points strong{font-family:'Oswald',sans-serif;font-size:26px;color:var(--marigold-dim);}
+.intro-points strong{font-family:'Oswald',sans-serif;font-size:26px;color:#fbfaf9;}
 .intro-points span{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-soft);}
 
 /* ============ CAPABILITIES ============ */
@@ -191,7 +191,7 @@ h1,h2,h3,h4{
 }
 .capability-number{
   font-family:'Oswald',sans-serif;font-weight:500;font-size:15px;
-  color:var(--marigold-dim);margin-bottom:22px;letter-spacing:.04em;
+  color:#fbfaf9;margin-bottom:22px;letter-spacing:.04em;
 }
 .capability-card h3{font-size:17px;margin-bottom:12px;text-transform:none;letter-spacing:0;color:var(--ink);}
 .capability-card p{font-size:14px;color:var(--text-soft);}
