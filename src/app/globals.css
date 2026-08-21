@@ -191,7 +191,7 @@ h1,h2,h3,h4{
 }
 .capability-number{
   font-family:'Oswald',sans-serif;font-weight:500;font-size:15px;
-  color:#fbfaf9;margin-bottom:22px;letter-spacing:.04em;
+  color:#081be9;margin-bottom:22px;letter-spacing:.04em;
 }
 .capability-card h3{font-size:17px;margin-bottom:12px;text-transform:none;letter-spacing:0;color:var(--ink);}
 .capability-card p{font-size:14px;color:var(--text-soft);}
