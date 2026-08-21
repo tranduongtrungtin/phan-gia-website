@@ -4,6 +4,37 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
+async function updateNoiDungNeuCo(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  formData: FormData
+) {
+  const introFields = ['intro_title', 'intro_text_1', 'intro_text_2', 'intro_point_1', 'intro_point_2', 'intro_point_3']
+  const capFields = [
+    'cap_title',
+    'cap_desc',
+    'cap_1_title', 'cap_1_desc',
+    'cap_2_title', 'cap_2_desc',
+    'cap_3_title', 'cap_3_desc',
+    'cap_4_title', 'cap_4_desc',
+  ]
+  const allFields = [...introFields, ...capFields]
+
+  const updateData: Record<string, unknown> = {}
+  let coDuLieu = false
+
+  for (const field of allFields) {
+    if (formData.has(field)) {
+      updateData[field] = formData.get(field) as string
+      coDuLieu = true
+    }
+  }
+
+  if (coDuLieu) {
+    updateData.updated_at = new Date().toISOString()
+    await supabase.from('site_settings').update(updateData).eq('id', 1)
+  }
+}
+
 export async function createMenuItem(formData: FormData) {
   const supabase = await createClient()
 
@@ -41,7 +72,10 @@ export async function updateMenuItem(id: string, formData: FormData) {
     redirect(`/admin/menu/${id}?error=${encodeURIComponent(error.message)}`)
   }
 
+  await updateNoiDungNeuCo(supabase, formData)
+
   revalidatePath('/admin/menu')
+  revalidatePath('/admin/cai-dat')
   revalidatePath('/')
   redirect('/admin/menu')
 }
