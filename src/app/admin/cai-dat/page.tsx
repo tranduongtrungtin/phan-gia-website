@@ -171,6 +171,113 @@ export default async function SettingsPage() {
             />
           </label>
 
+          <div style={{ borderTop: '2px solid #eee', paddingTop: '20px', marginTop: '10px' }}>
+            <h2 style={{ fontSize: '18px', marginBottom: '14px' }}>Khối &quot;Giới thiệu&quot;</h2>
+
+            <label>
+              Tiêu đề (VD: Tạo dấu ấn cho thương hiệu)
+              <input
+                name="intro_title"
+                defaultValue={settings?.intro_title}
+                placeholder="Tạo dấu ấn cho thương hiệu"
+                style={inputStyle}
+              />
+            </label>
+
+            <label style={{ display: 'block', marginTop: '14px' }}>
+              Đoạn văn 1
+              <textarea
+                name="intro_text_1"
+                defaultValue={settings?.intro_text_1}
+                rows={3}
+                style={inputStyle}
+              />
+            </label>
+
+            <label style={{ display: 'block', marginTop: '14px' }}>
+              Đoạn văn 2
+              <textarea
+                name="intro_text_2"
+                defaultValue={settings?.intro_text_2}
+                rows={3}
+                style={inputStyle}
+              />
+            </label>
+
+            <label style={{ display: 'block', marginTop: '14px' }}>
+              Mục 01 (VD: Tư vấn & thiết kế)
+              <input
+                name="intro_point_1"
+                defaultValue={settings?.intro_point_1}
+                style={inputStyle}
+              />
+            </label>
+
+            <label style={{ display: 'block', marginTop: '14px' }}>
+              Mục 02
+              <input
+                name="intro_point_2"
+                defaultValue={settings?.intro_point_2}
+                style={inputStyle}
+              />
+            </label>
+
+            <label style={{ display: 'block', marginTop: '14px' }}>
+              Mục 03
+              <input
+                name="intro_point_3"
+                defaultValue={settings?.intro_point_3}
+                style={inputStyle}
+              />
+            </label>
+          </div>
+
+          <div style={{ borderTop: '2px solid #eee', paddingTop: '20px', marginTop: '10px' }}>
+            <h2 style={{ fontSize: '18px', marginBottom: '14px' }}>Khối &quot;Năng lực&quot;</h2>
+
+            <label>
+              Tiêu đề (VD: Một quy trình đồng bộ)
+              <input
+                name="cap_title"
+                defaultValue={settings?.cap_title}
+                placeholder="Một quy trình đồng bộ"
+                style={inputStyle}
+              />
+            </label>
+
+            <label style={{ display: 'block', marginTop: '14px' }}>
+              Mô tả ngắn
+              <textarea
+                name="cap_desc"
+                defaultValue={settings?.cap_desc}
+                rows={3}
+                style={inputStyle}
+              />
+            </label>
+
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} style={{ marginTop: '14px' }}>
+                <label style={{ display: 'block' }}>
+                  Mục {n} — Tiêu đề
+                  <input
+                    name={`cap_${n}_title`}
+                    defaultValue={settings?.[`cap_${n}_title`]}
+                    style={inputStyle}
+                  />
+                </label>
+                <label style={{ display: 'block', marginTop: '6px' }}>
+                  Mục {n} — Mô tả
+                  <textarea
+                    name={`cap_${n}_desc`}
+                    defaultValue={settings?.[`cap_${n}_desc`]}
+                    rows={2}
+                    style={inputStyle}
+                  />
+                </label>
+              </div>
+            ))}
+          </div>
+
           <button
             type="submit"
             style={{

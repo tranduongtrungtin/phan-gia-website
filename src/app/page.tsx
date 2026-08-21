@@ -3,6 +3,7 @@ import FloatingContact from './_components/FloatingContact'
 import SiteHeader from './_components/SiteHeader'
 import SiteFooter from './_components/SiteFooter'
 import HeroSlider from './_components/HeroSlider'
+
 export async function generateMetadata() {
   const supabase = await createClient()
   const { data: settings } = await supabase
@@ -48,6 +49,7 @@ export default async function Home() {
   const diaChi = settings?.dia_chi || '56 Võ Văn Kiệt, P. Bình Thủy, TP. Cần Thơ'
   const hotlineTel = hotline.replace(/\s/g, '')
   const mapPlaceName = settings?.map_place_name || 'Quảng cáo Phan Gia'
+
   const heroImages: string[] =
     Array.isArray(settings?.hero_images) && settings.hero_images.length > 0
       ? settings.hero_images
@@ -63,6 +65,49 @@ export default async function Home() {
         'THIẾT KẾ • SẢN XUẤT • THI CÔNG',
         'ĐỐI TÁC TIN CẬY TẠI ĐBSCL',
       ]
+
+  const introTitle = settings?.intro_title || 'Tạo dấu ấn cho thương hiệu'
+  const introText1 =
+    settings?.intro_text_1 ||
+    'Phan Gia cung cấp giải pháp quảng cáo từ thiết kế, sản xuất đến thi công, giúp doanh nghiệp xây dựng hình ảnh chuyên nghiệp và nổi bật trong không gian kinh doanh.'
+  const introText2 =
+    settings?.intro_text_2 ||
+    'Với định hướng kết hợp giữa ý tưởng, kỹ thuật và khả năng sản xuất thực tế, Phan Gia triển khai nhiều hạng mục quảng cáo theo nhu cầu riêng của từng khách hàng.'
+  const introPoint1 = settings?.intro_point_1 || 'Tư vấn & thiết kế'
+  const introPoint2 = settings?.intro_point_2 || 'Sản xuất theo yêu cầu'
+  const introPoint3 = settings?.intro_point_3 || 'Thi công hoàn thiện'
+
+  const capTitle = settings?.cap_title || 'Một quy trình đồng bộ'
+  const capDesc =
+    settings?.cap_desc ||
+    'Phan Gia chủ động triển khai nhiều công đoạn trong cùng một quy trình, giúp kiểm soát tốt chất lượng và tiến độ của từng hạng mục.'
+
+  const capItems = [
+    {
+      title: settings?.cap_1_title || 'Tư vấn & lên ý tưởng',
+      desc:
+        settings?.cap_1_desc ||
+        'Tiếp nhận nhu cầu, khảo sát thực tế và đề xuất phương án phù hợp với thương hiệu, không gian và ngân sách.',
+    },
+    {
+      title: settings?.cap_2_title || 'Thiết kế',
+      desc:
+        settings?.cap_2_desc ||
+        'Phát triển ý tưởng thành phương án thiết kế trực quan, rõ ràng và phù hợp với nhận diện thương hiệu.',
+    },
+    {
+      title: settings?.cap_3_title || 'Sản xuất',
+      desc:
+        settings?.cap_3_desc ||
+        'Gia công các hạng mục quảng cáo theo thiết kế và yêu cầu kỹ thuật đã thống nhất.',
+    },
+    {
+      title: settings?.cap_4_title || 'Thi công',
+      desc:
+        settings?.cap_4_desc ||
+        'Lắp đặt và hoàn thiện công trình tại thực tế, đảm bảo tính thẩm mỹ và khả năng sử dụng.',
+    },
+  ]
 
   return (
     <>
@@ -124,42 +169,30 @@ export default async function Home() {
           <div className="intro-heading">
             <div className="section-label">VỀ PHAN GIA</div>
 
-            <h2>
-              Tạo dấu ấn
-              <br />
-              cho thương hiệu
-            </h2>
+            <h2>{introTitle}</h2>
 
             <div className="intro-line"></div>
           </div>
 
           <div className="intro-content">
-            <p className="intro-lead">
-              Phan Gia cung cấp giải pháp quảng cáo từ thiết kế,
-              sản xuất đến thi công, giúp doanh nghiệp xây dựng hình ảnh
-              chuyên nghiệp và nổi bật trong không gian kinh doanh.
-            </p>
+            <p className="intro-lead">{introText1}</p>
 
-            <p>
-              Với định hướng kết hợp giữa ý tưởng, kỹ thuật và khả năng
-              sản xuất thực tế, Phan Gia triển khai nhiều hạng mục quảng
-              cáo theo nhu cầu riêng của từng khách hàng.
-            </p>
+            <p>{introText2}</p>
 
             <div className="intro-points">
               <div>
                 <strong>01</strong>
-                <span>Tư vấn &amp; thiết kế</span>
+                <span>{introPoint1}</span>
               </div>
 
               <div>
                 <strong>02</strong>
-                <span>Sản xuất theo yêu cầu</span>
+                <span>{introPoint2}</span>
               </div>
 
               <div>
                 <strong>03</strong>
-                <span>Thi công hoàn thiện</span>
+                <span>{introPoint3}</span>
               </div>
             </div>
           </div>
@@ -171,64 +204,22 @@ export default async function Home() {
             <div>
               <div className="section-label">NĂNG LỰC</div>
 
-              <h2>
-                Một quy trình
-                <br />
-                đồng bộ
-              </h2>
+              <h2>{capTitle}</h2>
             </div>
 
-            <p>
-              Phan Gia chủ động triển khai nhiều công đoạn trong cùng
-              một quy trình, giúp kiểm soát tốt chất lượng và tiến độ
-              của từng hạng mục.
-            </p>
+            <p>{capDesc}</p>
           </div>
 
           <div className="capability-grid">
-            <div className="capability-card">
-              <div className="capability-number">01</div>
+            {capItems.map((item, i) => (
+              <div key={i} className="capability-card">
+                <div className="capability-number">{String(i + 1).padStart(2, '0')}</div>
 
-              <h3>Tư vấn &amp; lên ý tưởng</h3>
+                <h3>{item.title}</h3>
 
-              <p>
-                Tiếp nhận nhu cầu, khảo sát thực tế và đề xuất phương án
-                phù hợp với thương hiệu, không gian và ngân sách.
-              </p>
-            </div>
-
-            <div className="capability-card">
-              <div className="capability-number">02</div>
-
-              <h3>Thiết kế</h3>
-
-              <p>
-                Phát triển ý tưởng thành phương án thiết kế trực quan,
-                rõ ràng và phù hợp với nhận diện thương hiệu.
-              </p>
-            </div>
-
-            <div className="capability-card">
-              <div className="capability-number">03</div>
-
-              <h3>Sản xuất</h3>
-
-              <p>
-                Gia công các hạng mục quảng cáo theo thiết kế và yêu cầu
-                kỹ thuật đã thống nhất.
-              </p>
-            </div>
-
-            <div className="capability-card">
-              <div className="capability-number">04</div>
-
-              <h3>Thi công</h3>
-
-              <p>
-                Lắp đặt và hoàn thiện công trình tại thực tế, đảm bảo
-                tính thẩm mỹ và khả năng sử dụng.
-              </p>
-            </div>
+                <p>{item.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -306,8 +297,8 @@ export default async function Home() {
 
           <div className="project-grid">
             {projects?.map((p) => (
-              
-              <a  key={p.id}
+              <a
+                key={p.id}
                 href={`/du-an/${p.slug}`}
                 className="project-card"
               >
