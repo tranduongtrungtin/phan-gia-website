@@ -4,28 +4,57 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
+async function uploadIfPresent(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  formData: FormData,
+  fieldName: string
+): Promise<string | null> {
+  const file = formData.get(fieldName) as File | null
+  if (!file || file.size === 0) return null
+
+  const ext = file.name.split('.').pop()
+  const fileName = `${fieldName}-${crypto.randomUUID()}.${ext}`
+
+  const { error } = await supabase.storage.from('images').upload(fileName, file)
+  if (error) return null
+
+  const { data } = supabase.storage.from('images').getPublicUrl(fileName)
+  return data.publicUrl
+}
+
 async function updateNoiDungNeuCo(
   supabase: Awaited<ReturnType<typeof createClient>>,
   formData: FormData
 ) {
-  const introFields = ['intro_title', 'intro_text_1', 'intro_text_2', 'intro_point_1', 'intro_point_2', 'intro_point_3']
-  const capFields = [
-    'cap_title',
-    'cap_desc',
+  const textFields = [
+    'intro_title', 'intro_text_1', 'intro_text_2',
+    'intro_point_1', 'intro_point_2', 'intro_point_3',
+    'cap_title', 'cap_desc',
     'cap_1_title', 'cap_1_desc',
     'cap_2_title', 'cap_2_desc',
     'cap_3_title', 'cap_3_desc',
     'cap_4_title', 'cap_4_desc',
   ]
-  const allFields = [...introFields, ...capFields]
 
   const updateData: Record<string, unknown> = {}
   let coDuLieu = false
 
-  for (const field of allFields) {
+  for (const field of textFields) {
     if (formData.has(field)) {
       updateData[field] = formData.get(field) as string
       coDuLieu = true
+    }
+  }
+
+  const imageFields = ['intro_image', 'cap_1_image', 'cap_2_image', 'cap_3_image', 'cap_4_image']
+  for (const field of imageFields) {
+    if (formData.has(field)) {
+      const url = await uploadIfPresent(supabase, formData, field)
+      if (url) {
+        const columnName = field === 'intro_image' ? 'intro_image_url' : field
+        updateData[columnName] = url
+        coDuLieu = true
+      }
     }
   }
 

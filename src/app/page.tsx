@@ -73,9 +73,12 @@ export default async function Home() {
   const introText2 =
     settings?.intro_text_2 ||
     'Với định hướng kết hợp giữa ý tưởng, kỹ thuật và khả năng sản xuất thực tế, Phan Gia triển khai nhiều hạng mục quảng cáo theo nhu cầu riêng của từng khách hàng.'
-  const introPoint1 = settings?.intro_point_1 || 'Tư vấn & thiết kế'
-  const introPoint2 = settings?.intro_point_2 || 'Sản xuất theo yêu cầu'
-  const introPoint3 = settings?.intro_point_3 || 'Thi công hoàn thiện'
+
+  const introPoints = [
+    { text: settings?.intro_point_1 || 'Tư vấn & thiết kế', image: settings?.intro_point_1_image },
+    { text: settings?.intro_point_2 || 'Sản xuất theo yêu cầu', image: settings?.intro_point_2_image },
+    { text: settings?.intro_point_3 || 'Thi công hoàn thiện', image: settings?.intro_point_3_image },
+  ]
 
   const capTitle = settings?.cap_title || 'Một quy trình đồng bộ'
   const capDesc =
@@ -88,24 +91,28 @@ export default async function Home() {
       desc:
         settings?.cap_1_desc ||
         'Tiếp nhận nhu cầu, khảo sát thực tế và đề xuất phương án phù hợp với thương hiệu, không gian và ngân sách.',
+      image: settings?.cap_1_image,
     },
     {
       title: settings?.cap_2_title || 'Thiết kế',
       desc:
         settings?.cap_2_desc ||
         'Phát triển ý tưởng thành phương án thiết kế trực quan, rõ ràng và phù hợp với nhận diện thương hiệu.',
+      image: settings?.cap_2_image,
     },
     {
       title: settings?.cap_3_title || 'Sản xuất',
       desc:
         settings?.cap_3_desc ||
         'Gia công các hạng mục quảng cáo theo thiết kế và yêu cầu kỹ thuật đã thống nhất.',
+      image: settings?.cap_3_image,
     },
     {
       title: settings?.cap_4_title || 'Thi công',
       desc:
         settings?.cap_4_desc ||
         'Lắp đặt và hoàn thiện công trình tại thực tế, đảm bảo tính thẩm mỹ và khả năng sử dụng.',
+      image: settings?.cap_4_image,
     },
   ]
 
@@ -180,20 +187,24 @@ export default async function Home() {
             <p>{introText2}</p>
 
             <div className="intro-points">
-              <div>
-                <strong>01</strong>
-                <span>{introPoint1}</span>
-              </div>
-
-              <div>
-                <strong>02</strong>
-                <span>{introPoint2}</span>
-              </div>
-
-              <div>
-                <strong>03</strong>
-                <span>{introPoint3}</span>
-              </div>
+              {introPoints.map((point, i) => (
+                <div key={i}>
+                  {point.image && (
+                    <img
+                      src={point.image}
+                      alt={point.text}
+                      style={{
+                        width: '100%',
+                        height: '90px',
+                        objectFit: 'cover',
+                        marginBottom: '10px',
+                      }}
+                    />
+                  )}
+                  <strong>{String(i + 1).padStart(2, '0')}</strong>
+                  <span>{point.text}</span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -213,6 +224,19 @@ export default async function Home() {
           <div className="capability-grid">
             {capItems.map((item, i) => (
               <div key={i} className="capability-card">
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    style={{
+                      width: '100%',
+                      height: '110px',
+                      objectFit: 'cover',
+                      marginBottom: '20px',
+                    }}
+                  />
+                )}
+
                 <div className="capability-number">{String(i + 1).padStart(2, '0')}</div>
 
                 <h3>{item.title}</h3>

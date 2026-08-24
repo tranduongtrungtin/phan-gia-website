@@ -61,7 +61,7 @@ export default async function EditMenuItemPage({
 
           {isGioiThieu && (
             <div style={{ borderTop: '2px solid #eee', paddingTop: '20px', marginTop: '10px' }}>
-              <h2 style={{ fontSize: '18px', marginBottom: '14px' }}>Nội dung khối &quot;Giới thiệu&quot;</h2>
+              <h2 style={{ fontSize: '18px', marginBottom: '14px' }}>Nội dung khối "Giới thiệu"</h2>
 
               <label>
                 Tiêu đề (VD: Tạo dấu ấn cho thương hiệu)
@@ -83,26 +83,39 @@ export default async function EditMenuItemPage({
                 <textarea name="intro_text_2" defaultValue={settings?.intro_text_2} rows={3} style={inputStyle} />
               </label>
 
-              <label style={{ display: 'block', marginTop: '14px' }}>
-                Mục 01 (VD: Tư vấn & thiết kế)
-                <input name="intro_point_1" defaultValue={settings?.intro_point_1} style={inputStyle} />
-              </label>
+              {[1, 2, 3].map((n) => (
+                <div key={n} style={{ marginTop: '20px', paddingTop: '14px', borderTop: '1px dashed #ddd' }}>
+                  <label style={{ display: 'block' }}>
+                    {`Mục ${String(n).padStart(2, '0')}`}
+                    <input
+                      name={`intro_point_${n}`}
+                      defaultValue={settings?.[`intro_point_${n}`]}
+                      style={inputStyle}
+                    />
+                  </label>
 
-              <label style={{ display: 'block', marginTop: '14px' }}>
-                Mục 02
-                <input name="intro_point_2" defaultValue={settings?.intro_point_2} style={inputStyle} />
-              </label>
+                  {settings?.[`intro_point_${n}_image`] && (
+                    <div style={{ marginTop: '10px' }}>
+                      <img
+                        src={settings[`intro_point_${n}_image`]}
+                        alt={`Mục ${n}`}
+                        style={{ width: '120px', height: '80px', objectFit: 'cover', border: '1px solid #ddd' }}
+                      />
+                    </div>
+                  )}
 
-              <label style={{ display: 'block', marginTop: '14px' }}>
-                Mục 03
-                <input name="intro_point_3" defaultValue={settings?.intro_point_3} style={inputStyle} />
-              </label>
+                  <label style={{ display: 'block', marginTop: '10px' }}>
+                    {settings?.[`intro_point_${n}_image`] ? 'Đổi ảnh khác' : 'Tải ảnh lên (không bắt buộc)'}
+                    <input name={`intro_point_${n}_image`} type="file" accept="image/*" style={inputStyle} />
+                  </label>
+                </div>
+              ))}
             </div>
           )}
 
           {isNangLuc && (
             <div style={{ borderTop: '2px solid #eee', paddingTop: '20px', marginTop: '10px' }}>
-              <h2 style={{ fontSize: '18px', marginBottom: '14px' }}>Nội dung khối &quot;Năng lực&quot;</h2>
+              <h2 style={{ fontSize: '18px', marginBottom: '14px' }}>Nội dung khối "Năng lực"</h2>
 
               <label>
                 Tiêu đề (VD: Một quy trình đồng bộ)
@@ -120,7 +133,7 @@ export default async function EditMenuItemPage({
               </label>
 
               {[1, 2, 3, 4].map((n) => (
-                <div key={n} style={{ marginTop: '14px' }}>
+                <div key={n} style={{ marginTop: '20px', paddingTop: '14px', borderTop: '1px dashed #ddd' }}>
                   <label style={{ display: 'block' }}>
                     Mục {n} — Tiêu đề
                     <input
@@ -137,6 +150,21 @@ export default async function EditMenuItemPage({
                       rows={2}
                       style={inputStyle}
                     />
+                  </label>
+
+                  {settings?.[`cap_${n}_image`] && (
+                    <div style={{ marginTop: '10px' }}>
+                      <img
+                        src={settings[`cap_${n}_image`]}
+                        alt={`Mục ${n}`}
+                        style={{ width: '120px', height: '80px', objectFit: 'cover', border: '1px solid #ddd' }}
+                      />
+                    </div>
+                  )}
+
+                  <label style={{ display: 'block', marginTop: '10px' }}>
+                    {settings?.[`cap_${n}_image`] ? 'Đổi ảnh khác' : 'Tải ảnh lên'}
+                    <input name={`cap_${n}_image`} type="file" accept="image/*" style={inputStyle} />
                   </label>
                 </div>
               ))}
