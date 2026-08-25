@@ -149,14 +149,15 @@ export default async function AdminUsersPage() {
                   const isInactive = !lastSignInDate || lastSignInDate < oneMonthAgo
 
                   const formattedLastSignIn = lastSignInDate
-                    ? lastSignInDate.toLocaleString('vi-VN', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                      })
-                    : 'Chưa đăng nhập'
+  ? lastSignInDate.toLocaleString('vi-VN', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
+  : 'Chưa đăng nhập'
 
                   return (
                     <tr key={u.id} style={{ borderBottom: '1px solid #eee' }}>
