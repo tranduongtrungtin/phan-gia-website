@@ -188,59 +188,98 @@ export default async function Home() {
 
             <div className="intro-points">
               {introPoints.map((point, index) => (
-  <div key={index}>
-    <strong>{String(index + 1).padStart(2, '0')}</strong>
-    <span>{point.text}</span>
+                <div key={index}>
+                  <strong>{String(index + 1).padStart(2, '0')}</strong>
+                  <span>{point.text}</span>
 
-    {point.image && (
-      <img
-        src={point.image}
-        alt={point.text}
-        className="intro-point-image"
-      />
-    )}
-  </div>
-
+                  {point.image && (
+                    <img
+                      src={point.image}
+                      alt={point.text}
+                      className="intro-point-image"
+                    />
+                  )}
+                </div>
               ))}
             </div>
           </div>
         </section>
 
         {/* NĂNG LỰC */}
-        <section id="nang-luc" className="capabilities">
-          <div className="section-heading">
-            <div>
-              <div className="section-label">NĂNG LỰC</div>
+        <section id="nang-luc" className="capabilities" style={{ padding: '70px 24px', background: '#f4efe4' }}>
+          <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                gap: '16px',
+                marginBottom: '32px',
+              }}
+            >
+              <div>
+                <div className="section-label" style={{ marginBottom: '8px' }}>— NĂNG LỰC</div>
+                <h2 style={{ fontSize: '32px', fontWeight: 900, textTransform: 'uppercase', margin: 0, letterSpacing: '-0.5px' }}>
+                  {capTitle}
+                </h2>
+              </div>
 
-              <h2>{capTitle}</h2>
+              <p style={{ maxWidth: '460px', margin: 0, fontSize: '14px', lineHeight: 1.6, color: '#555' }}>
+                {capDesc}
+              </p>
             </div>
 
-            <p>{capDesc}</p>
-          </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+                gap: '16px',
+              }}
+            >
+              {capItems.map((item, i) => (
+                <div
+                  key={i}
+                  className="capability-card"
+                  style={{
+                    background: '#e8decb',
+                    padding: '20px',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    margin: 0,
+                  }}
+                >
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      style={{
+                        width: '100%',
+                        height: '120px',
+                        objectFit: 'cover',
+                        borderRadius: '4px',
+                        marginBottom: '16px',
+                        display: 'block',
+                      }}
+                    />
+                  )}
 
-          <div className="capability-grid">
-            {capItems.map((item, i) => (
-              <div key={i} className="capability-card">
-                {item.image && (
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    style={{
-                      width: '100%',
-                      height: '110px',
-                      objectFit: 'cover',
-                      marginBottom: '20px',
-                    }}
-                  />
-                )}
+                  <div className="capability-number" style={{ fontSize: '13px', fontWeight: 700, color: '#777', marginBottom: '8px' }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
 
-                <div className="capability-number">{String(i + 1).padStart(2, '0')}</div>
+                  <h3 style={{ fontSize: '17px', fontWeight: 800, marginBottom: '8px', color: '#171717' }}>
+                    {item.title}
+                  </h3>
 
-                <h3>{item.title}</h3>
-
-                <p>{item.desc}</p>
-              </div>
-            ))}
+                  <p style={{ fontSize: '13px', lineHeight: 1.5, color: '#444', margin: 0 }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -319,7 +358,7 @@ export default async function Home() {
           <div className="project-grid">
             {projects?.map((p) => (
               <a
-                  key={p.id}
+                key={p.id}
                 href={`/du-an/${p.slug}`}
                 className="project-card"
               >
