@@ -2,10 +2,18 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 
 export async function updateSettings(formData: FormData) {
+  // 1. Kiểm tra xác thực người dùng
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
+  if (!user) {
+    throw new Error('Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập.')
+  }
+
+  // 2. Chuẩn bị dữ liệu cập nhật
   const updateData: Record<string, unknown> = {
     hotline: formData.get('hotline') as string,
     email: formData.get('email') as string,
@@ -18,20 +26,28 @@ export async function updateSettings(formData: FormData) {
     updated_at: new Date().toISOString(),
   }
 
-  const file = formData.get('logo_file') as File | null
+  // 3. Xử lý Logo bằng quyền Admin
+  if (formData.get('delete_logo') === 'on') {
+    updateData.logo_url = null
+  } else {
+    const file = formData.get('logo_file') as File | null
 
-  if (file && file.size > 0) {
-    const ext = file.name.split('.').pop()
-    const fileName = `logo-${crypto.randomUUID()}.${ext}`
+    if (file && file.size > 0) {
+      const ext = file.name.split('.').pop()
+      const fileName = `logo-${crypto.randomUUID()}.${ext}`
 
-    const { error: uploadError } = await supabase.storage.from('images').upload(fileName, file)
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from('images')
+        .upload(fileName, file)
 
-    if (!uploadError) {
-      const { data } = supabase.storage.from('images').getPublicUrl(fileName)
-      updateData.logo_url = data.publicUrl
+      if (!uploadError) {
+        const { data } = supabaseAdmin.storage.from('images').getPublicUrl(fileName)
+        updateData.logo_url = data.publicUrl
+      }
     }
   }
 
+  // 4. Xử lý Hero Images bằng quyền Admin
   if (formData.has('hero_section_touched')) {
     const heroCount = Number(formData.get('hero_count') || 0)
     const finalUrls: string[] = []
@@ -47,12 +63,12 @@ export async function updateSettings(formData: FormData) {
         const ext = replaceFile.name.split('.').pop()
         const fileName = `hero-${crypto.randomUUID()}.${ext}`
 
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabaseAdmin.storage
           .from('images')
           .upload(fileName, replaceFile)
 
         if (!uploadError) {
-          const { data } = supabase.storage.from('images').getPublicUrl(fileName)
+          const { data } = supabaseAdmin.storage.from('images').getPublicUrl(fileName)
           finalUrls.push(data.publicUrl)
         } else {
           finalUrls.push(originalUrl)
@@ -69,12 +85,12 @@ export async function updateSettings(formData: FormData) {
       const ext = heroFile.name.split('.').pop()
       const fileName = `hero-${crypto.randomUUID()}.${ext}`
 
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabaseAdmin.storage
         .from('images')
         .upload(fileName, heroFile)
 
       if (!uploadError) {
-        const { data } = supabase.storage.from('images').getPublicUrl(fileName)
+        const { data } = supabaseAdmin.storage.from('images').getPublicUrl(fileName)
         finalUrls.push(data.publicUrl)
       }
     }
@@ -82,8 +98,18 @@ export async function updateSettings(formData: FormData) {
     updateData.hero_images = finalUrls
   }
 
-  await supabase.from('site_settings').update(updateData).eq('id', 1)
+  // 5. Cập nhật bảng site_settings bằng quyền Admin
+  const { error: dbError } = await supabaseAdmin
+    .from('site_settings')
+    .update(updateData)
+    .eq('id', 1)
+
+  if (dbError) {
+    throw new Error(`Cập nhật thất bại: ${dbError.message}`)
+  }
 
   revalidatePath('/admin/cai-dat')
   revalidatePath('/')
+
+  
 }

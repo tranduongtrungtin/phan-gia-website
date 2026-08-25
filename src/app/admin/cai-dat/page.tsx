@@ -89,9 +89,16 @@ export default async function SettingsPage() {
           )}
 
           <label>
-            {settings?.logo_url ? 'Đổi logo khác' : 'Tải logo lên'} (để trống thì dùng chữ PHAN GIA)
-            <input name="logo_file" type="file" accept="image/*" style={inputStyle} />
-          </label>
+  {settings?.logo_url ? 'Đổi logo khác' : 'Tải logo lên'} (để trống thì dùng chữ PHAN GIA)
+  <input name="logo_file" type="file" accept="image/*" style={inputStyle} />
+</label>
+
+{settings?.logo_url && (
+  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#a90000' }}>
+    <input name="delete_logo" type="checkbox" />
+    Xóa logo, dùng lại chữ PHAN GIA mặc định
+  </label>
+)}
 
           <div>
             <p style={{ margin: '0 0 10px', fontSize: '14px', fontWeight: 600 }}>
