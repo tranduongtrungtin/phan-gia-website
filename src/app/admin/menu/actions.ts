@@ -46,13 +46,16 @@ async function updateNoiDungNeuCo(
     }
   }
 
-  const imageFields = ['intro_image', 'cap_1_image', 'cap_2_image', 'cap_3_image', 'cap_4_image']
+  const imageFields = [
+    'intro_point_1_image', 'intro_point_2_image', 'intro_point_3_image',
+    'cap_1_image', 'cap_2_image', 'cap_3_image', 'cap_4_image',
+  ]
+
   for (const field of imageFields) {
     if (formData.has(field)) {
       const url = await uploadIfPresent(supabase, formData, field)
       if (url) {
-        const columnName = field === 'intro_image' ? 'intro_image_url' : field
-        updateData[columnName] = url
+        updateData[field] = url
         coDuLieu = true
       }
     }

@@ -187,23 +187,20 @@ export default async function Home() {
             <p>{introText2}</p>
 
             <div className="intro-points">
-              {introPoints.map((point, i) => (
-                <div key={i}>
-                  {point.image && (
-                    <img
-                      src={point.image}
-                      alt={point.text}
-                      style={{
-                        width: '100%',
-                        height: '90px',
-                        objectFit: 'cover',
-                        marginBottom: '10px',
-                      }}
-                    />
-                  )}
-                  <strong>{String(i + 1).padStart(2, '0')}</strong>
-                  <span>{point.text}</span>
-                </div>
+              {introPoints.map((point, index) => (
+  <div key={index}>
+    <strong>{String(index + 1).padStart(2, '0')}</strong>
+    <span>{point.text}</span>
+
+    {point.image && (
+      <img
+        src={point.image}
+        alt={point.text}
+        className="intro-point-image"
+      />
+    )}
+  </div>
+
               ))}
             </div>
           </div>
@@ -322,7 +319,7 @@ export default async function Home() {
           <div className="project-grid">
             {projects?.map((p) => (
               <a
-                key={p.id}
+                  key={p.id}
                 href={`/du-an/${p.slug}`}
                 className="project-card"
               >
