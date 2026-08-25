@@ -48,4 +48,6 @@ export default function AdminHeader() {
       </form>
     </div>
   )
-}
+}<Link href="/admin/tai-khoan" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500 }}>
+  Tài khoản
+</Link>
